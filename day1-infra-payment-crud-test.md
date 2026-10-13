@@ -1,8 +1,9 @@
-# Day 1 Test: Infra + Payment Service CRUD
+## Day 1 Test: Infra + Payment Service CRUD
 
-Verified in GitHub Codespaces. Goal: the Docker stack runs and `POST /payments` saves a `PENDING` payment to MySQL that can be fetched with `GET`.
+Verified in GitHub Codespaces. 
+- Goal: the Docker stack runs and `POST /payments` saves a `PENDING` payment to MySQL that can be fetched with `GET`.
 
-## 1. Start infrastructure
+### 1. Start infrastructure
 
 From the project root:
 
@@ -15,7 +16,7 @@ Expected: 4 containers (`zookeeper`, `kafka`, `kafka-ui`, `mysql`) show `running
 
 Kafka UI: http://localhost:8080
 
-## 2. Verify databases exist
+### 2. Verify databases exist
 
 ```bash
 docker exec -it $(docker compose ps -q mysql) mysql -uroot -proot -e "SHOW DATABASES;"
@@ -23,7 +24,7 @@ docker exec -it $(docker compose ps -q mysql) mysql -uroot -proot -e "SHOW DATAB
 
 Expected: `paymentdb` and `frauddb` are listed.
 
-## 3. Check Java version
+### 3. Check Java version
 
 ```bash
 java -version
@@ -31,7 +32,7 @@ java -version
 
 Expected: 17 or higher.
 
-## 4. Start payment-service
+### 4. Start payment-service
 
 ```bash
 cd payment-service
@@ -43,7 +44,7 @@ Expected log: `Started PaymentServiceApplication` and `Tomcat started on port 80
 
 Swagger UI: http://localhost:8081/swagger-ui.html
 
-## 5. Create a payment (open a second terminal)
+### 5. Create a payment (open a second terminal)
 
 ```bash
 curl -i -X POST http://localhost:8081/api/v1/payments \
@@ -53,7 +54,7 @@ curl -i -X POST http://localhost:8081/api/v1/payments \
 
 Expected: HTTP `201` with `"status":"PENDING"` and an `id`.
 
-## 6. Fetch the payment
+### 6. Fetch the payment
 
 ```bash
 curl http://localhost:8081/api/v1/payments/<PAYMENT_ID>
@@ -61,7 +62,7 @@ curl http://localhost:8081/api/v1/payments/<PAYMENT_ID>
 
 Expected: the same payment is returned.
 
-## 7. Validation test
+### 7. Validation test
 
 ```bash
 curl -i -X POST http://localhost:8081/api/v1/payments \
@@ -71,7 +72,7 @@ curl -i -X POST http://localhost:8081/api/v1/payments \
 
 Expected: HTTP `400`.
 
-## 8. Not found test
+### 8. Not found test
 
 ```bash
 curl -i http://localhost:8081/api/v1/payments/does-not-exist
@@ -79,7 +80,7 @@ curl -i http://localhost:8081/api/v1/payments/does-not-exist
 
 Expected: HTTP `404`.
 
-## 9. Verify the database row
+### 9. Verify the database row
 
 ```bash
 docker exec -it $(docker compose ps -q mysql) mysql -uroot -proot -e "SELECT id, card_id, amount, status FROM paymentdb.payments;"
@@ -95,7 +96,7 @@ Expected output:
 +--------------------------------------+-----------+---------+---------+
 ```
 
-## 10. Clean up
+### 10. Clean up
 
 ```bash
 # Ctrl+C to stop payment-service, then:
@@ -104,17 +105,17 @@ docker compose down     # removes containers
 docker compose down -v  # removes containers and database data
 ```
 
-## Day 1 checklist
+### Day 1 checklist
 
 - [x] 4 containers running
 - [x] Kafka UI opens
 - [x] `POST` returns `201 PENDING`
 - [x] `GET` returns the same payment
 - [x] Row visible in the `payments` table
-- [ ] Validation returns `400`
-- [ ] Unknown id returns `404`
+- [x] Validation returns `400`
+- [x] Unknown id returns `404`
 
-## Common problems
+### Common problems
 
 | Symptom | Fix |
 |---|---|
@@ -122,3 +123,7 @@ docker compose down -v  # removes containers and database data
 | `Unknown database 'paymentdb'` | Run `docker compose down -v`, then `docker compose up -d`. |
 | `cannot find symbol` | Check that `package` lines say `com.rohan.payment`. |
 | `permission denied: ./mvnw` | Run `chmod +x mvnw`. |
+
+### Test Result & Output
+
+<img width="1996" height="626" alt="image" src="https://github.com/user-attachments/assets/da36be4d-df6e-417a-89c7-12c2a188bcde" />
