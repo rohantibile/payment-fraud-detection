@@ -1,8 +1,8 @@
-# Day 2 Test: Kafka Producer and Consumer
+## Day 2 Test: Kafka Producer and Consumer
 
 Verified in GitHub Codespaces. Goal: `POST /payments` saves the payment and publishes an event to `payment-events`; fraud-service consumes and logs it.
 
-## 1. Start infrastructure
+### 1. Start infrastructure
 
 From the project root:
 
@@ -22,7 +22,7 @@ Expected: a log line such as `Kafka Server started`.
 
 Kafka UI: http://localhost:8080 (open from the Ports tab in Codespaces)
 
-## 2. Start fraud-service (terminal 1)
+### 2. Start fraud-service (terminal 1)
 
 ```bash
 cd fraud-service
@@ -32,7 +32,7 @@ chmod +x mvnw
 
 Expected: `Started FraudServiceApplication` and a log line showing partitions assigned to `fraud-service-group`.
 
-## 3. Start payment-service (terminal 2)
+### 3. Start payment-service (terminal 2)
 
 ```bash
 cd payment-service
@@ -42,7 +42,7 @@ chmod +x mvnw
 
 Expected: `Started PaymentServiceApplication` on port 8081.
 
-## 4. Send a payment (terminal 3)
+### 4. Send a payment (terminal 3)
 
 ```bash
 curl -i -X POST http://localhost:8081/api/v1/payments \
@@ -55,14 +55,19 @@ Expected:
 - payment-service log: `Published payment <id> to partition X offset Y`
 - fraud-service log: `Received payment <id> card=CARD-1001 amount=2500.50 city=Pune (key=CARD-1001, partition=X, offset=Y)`
 
-## 5. Verify in Kafka UI
+### Screenshots Scenario 1**
+<img width="1168" height="671" alt="Day2-Test1-CurlTerminal" src="https://github.com/user-attachments/assets/0cbaca56-1b1c-42b4-b846-dcb6b4d34715" />
+<img width="1213" height="673" alt="Day2-Test1-ProducerTerminal" src="https://github.com/user-attachments/assets/2edb2f74-0e17-4f4b-ac89-47ac7753a881" />
+<img width="989" height="224" alt="Day2-Test1-ConsumerTerminal" src="https://github.com/user-attachments/assets/4eb92018-8ae7-494d-a19e-b7a9ce4fb404" />
+
+### 5. Verify in Kafka UI
 
 1. Open http://localhost:8080
 2. Go to **Topics -> payment-events**
 3. Confirm the topic has **3 partitions**
 4. Open the **Messages** tab and confirm your message is listed with key `CARD-1001`
 
-## 6. Ordering test: same card goes to the same partition
+### 6. Ordering test: same card goes to the same partition
 
 ```bash
 for i in 1 2 3; do
@@ -74,6 +79,11 @@ done
 
 Expected: all three `Published payment ... partition X` lines show the **same partition number**.
 
+### Screenshots Scenario 2**
+<img width="1002" height="234" alt="Day2-Test2-CurlTerminal" src="https://github.com/user-attachments/assets/88e95e5d-3f11-4d6b-a763-06aeacf6cc3d" />
+<img width="1002" height="234" alt="Day2-Test2-ProducerTerminal" src="https://github.com/user-attachments/assets/d1d41fb9-dc67-4e15-befc-cfdc38973f4d" />
+<img width="998" height="252" alt="Day2-Test2-ConsumerTerminal" src="https://github.com/user-attachments/assets/8c2517c1-cdf5-49de-bb2d-5aefbafa5aa2" />
+
 Then send one payment with a different card:
 
 ```bash
@@ -84,7 +94,7 @@ curl -s -X POST http://localhost:8081/api/v1/payments \
 
 Expected: it may land on a different partition than `CARD-1001`.
 
-## 7. Fault tolerance test
+### 7. Fault tolerance test
 
 1. Stop fraud-service with `Ctrl+C` in terminal 1.
 2. Send a payment:
@@ -100,7 +110,13 @@ Expected: it may land on a different partition than `CARD-1001`.
    ```
    Expected: fraud-service logs `Received payment ... card=CARD-3003`, the message sent while it was down. Kafka kept it.
 
-## 8. Clean up
+### Screenshots Scenario 3**
+<img width="998" height="252" alt="Day2-Test3-CurlTerminal" src="https://github.com/user-attachments/assets/1f2151d0-32cc-4377-8be2-f08a90da0c9d" />
+<img width="998" height="252" alt="Day2-Test3-ProducerTerminal" src="https://github.com/user-attachments/assets/bc59a4c7-78f6-4dd7-a13e-827095420276" />
+<img width="998" height="252" alt="Day2-Test3-ConsumerTerminal" src="https://github.com/user-attachments/assets/fcfad11f-4d27-4e0f-b2a2-78a2669bd6b0" />
+
+
+### 8. Clean up
 
 ```bash
 # Ctrl+C in both app terminals, then:
@@ -111,16 +127,16 @@ docker compose down -v  # removes containers and database data
 
 Stop the Codespace from the bottom-left menu to save free hours.
 
-## Day 2 checklist
+### Day 2 checklist
 
 - [x] Topic `payment-events` works
 - [x] Producer logs partition and offset
 - [x] Consumer logs the received payment
-- [ ] Message visible in Kafka UI with 3 partitions
-- [ ] Same card -> same partition
-- [ ] Payment sent while fraud-service was down is received after restart
+- [x] Message visible in Kafka UI with 3 partitions
+- [x] Same card -> same partition
+- [x] Payment sent while fraud-service was down is received after restart
 
-## Fixes applied during Day 2
+### Fixes applied during Day 2
 
 | Problem | Fix |
 |---|---|
@@ -129,7 +145,7 @@ Stop the Codespace from the bottom-left menu to save free hours.
 | Spring Boot 4 uses Jackson 3 | Changed serializer classes to `JacksonJsonSerializer` and `JacksonJsonDeserializer` in the two `application.yml` files, if the old classes failed. |
 | springdoc 2.8.9 targets Boot 3 | Removed the Swagger dependency from payment-service. |
 
-## Common problems
+### Common problems
 
 | Symptom | Fix |
 |---|---|
