@@ -33,7 +33,7 @@ public class PaymentService {
             return repository.findById(id)
                     .map(PaymentResponse::from)
                     .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Payment not found" + id
+                        HttpStatus.NOT_FOUND, "Payment not found: " + id
                     ));
        }
 }

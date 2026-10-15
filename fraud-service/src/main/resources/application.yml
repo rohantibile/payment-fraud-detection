@@ -18,7 +18,7 @@ spring:
       group-id: fraud-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
         spring.json.value.default.type: com.rohan.fraud.dto.PaymentEvent
         spring.json.use.type.headers: false
