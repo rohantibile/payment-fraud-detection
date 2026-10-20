@@ -9,10 +9,16 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import com.rohan.fraud.dto.PaymentEvent;
+import com.rohan.fraud.service.FraudProcessingService;
 
 @Component
 public class PaymentEventConsumer {
     private static final Logger log = LoggerFactory.getLogger(PaymentEventConsumer.class);
+    private final FraudProcessingService service;
+
+    public PaymentEventConsumer(FraudProcessingService service) {
+        this.service = service;
+    }
 
     @KafkaListener(topics = "payment-events")
     public void onPayment(@Payload PaymentEvent event,
@@ -22,5 +28,6 @@ public class PaymentEventConsumer {
         log.info("Received payment {} card={} amount={} city={} (key={}, partition={}, offset={})",
                 event.paymentId(), event.cardId(), event.amount(), event.city(),
                 key, partition, offset);
+        service.process(event);
     }
 }
