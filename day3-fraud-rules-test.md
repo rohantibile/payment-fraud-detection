@@ -24,6 +24,9 @@ cd fraud-service
 
 Expected: `Tests run: 12, Failures: 0, Errors: 0`.
 
+Output Screenshots: 
+<img width="1986" height="530" alt="image" src="https://github.com/user-attachments/assets/b181d07f-3518-4672-93e8-1417ba556f39" />
+
 | Test class | Tests |
 |---|---|
 | VelocityRuleTest | 3 (under the limit, 4th payment blocked, old payments ignored) |
@@ -97,6 +100,11 @@ curl -X POST http://localhost:8081/api/v1/payments -H "Content-Type: application
 
 Expected: payments 1 to 3 `Decision APPROVED`, payment 4 `Decision BLOCKED` with a reason containing `VELOCITY`.
 
+Output Screenshots:
+<img width="1690" height="180" alt="image" src="https://github.com/user-attachments/assets/4ecd983f-f947-4621-8a3e-f3b3a87e570c" />
+<img width="1690" height="328" alt="image" src="https://github.com/user-attachments/assets/3cc1fbf4-139d-486b-801a-46cf71a953f5" />
+<img width="1692" height="556" alt="image" src="https://github.com/user-attachments/assets/bbb5da0b-7f36-437a-b13e-73610e66e325" />
+
 ## Scenario 3: Velocity, slow payments are not blocked
 
 Send the first three, wait 65 seconds, then send the fourth:
@@ -121,6 +129,11 @@ curl -X POST http://localhost:8081/api/v1/payments \
 
 Expected: `Decision FLAGGED` with a reason containing `AMOUNT`.
 
+Output Screenshots:
+<img width="1732" height="194" alt="image" src="https://github.com/user-attachments/assets/9dc7a0de-fa46-4826-8397-c05d5eec2953" />
+<img width="1736" height="104" alt="image" src="https://github.com/user-attachments/assets/1007cd5c-6b2b-44e9-9f4b-fbad6f33fbe3" />
+<img width="1736" height="104" alt="image" src="https://github.com/user-attachments/assets/d620c51a-c81b-4e0c-97b2-18bcbb37ae1d" />
+
 ## Scenario 5: Amount boundary, exactly 100000 is approved
 
 ```bash
@@ -144,6 +157,11 @@ curl -X POST http://localhost:8081/api/v1/payments \
 ```
 
 Expected: first `APPROVED`, second `BLOCKED` with a reason containing `GEO_MISMATCH`.
+
+Output Screenshots:
+<img width="1740" height="364" alt="image" src="https://github.com/user-attachments/assets/c62d5d03-37d9-4c2f-8a97-13eb749c3574" />
+<img width="1724" height="162" alt="image" src="https://github.com/user-attachments/assets/849ae39f-d4d6-4a87-8bfe-9cfc978e8d0f" />
+<img width="1722" height="328" alt="image" src="https://github.com/user-attachments/assets/f58386d6-b4c6-46d9-8214-d5fbbdf64db5" />
 
 ## Scenario 7: Geo, same city is approved
 
@@ -253,15 +271,15 @@ docker compose down -v  # removes containers and database data
 
 Stop the Codespace from the bottom-left menu to save free hours.
 
-## Day 3 checklist
+## Day 3 checklist (Main three rules tested)
 
-- [ ] 12 unit tests pass
-- [ ] Scenario 1: normal payment approved
-- [ ] Scenario 2: 4th rapid payment blocked (velocity)
+- [x] 12 unit tests pass
+- [x] Scenario 1: normal payment approved
+- [x] Scenario 2: 4th rapid payment blocked (velocity)
 - [ ] Scenario 3: slow payments approved
-- [ ] Scenario 4: 150000 flagged
+- [x] Scenario 4: 150000 flagged
 - [ ] Scenario 5: 100000 approved
-- [ ] Scenario 6: Pune then Mumbai blocked
+- [x] Scenario 6: Pune then Mumbai blocked
 - [ ] Scenario 7: same city approved
 - [ ] Scenario 8: city case ignored
 - [ ] Scenario 9: amount plus geo gives BLOCKED with both reasons
