@@ -14,7 +14,7 @@ public class TransactionRecord {
     @Column(nullable = false) private String city;
     @Column(nullable = false) private Instant createdAt;
     @Enumerated(EnumType.STRING) @Column(nullable = false) private Decision decision;
-    @Column(nullable = false) private String reason;
+    @Column(length = 500) private String reason;
 
     protected TransactionRecord() {}
 
@@ -32,7 +32,7 @@ public class TransactionRecord {
     public String getPaymentId() { return paymentId; }
     public String getCardId() { return cardId; }
     public BigDecimal getAmount() { return amount; }
-    public String getCity() { return paymentId; }
+    public String getCity() { return city; }
     public Instant getCreatedAt() { return createdAt; }
     public Decision getDecision() { return decision; }
     public String getReason() { return reason; }
