@@ -20,3 +20,12 @@ spring:
       acks: all
       properties:
         spring.json.add.type.headers: false
+    consumer:
+      group-id: payment-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      properties:
+        spring.json.value.default.type: com.rohan.payment.dto.FraudDecisionEvent
+        spring.json.use.type.headers: false
+        spring.json.trusted.packages: com.rohan.payment.dto
