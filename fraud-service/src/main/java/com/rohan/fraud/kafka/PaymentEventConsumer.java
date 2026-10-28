@@ -3,6 +3,7 @@ package com.rohan.fraud.kafka;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,10 +25,12 @@ public class PaymentEventConsumer {
     public void onPayment(@Payload PaymentEvent event,
                           @Header(KafkaHeaders.RECEIVED_KEY) String key,
                           @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
-                          @Header(KafkaHeaders.OFFSET) long offset) {
+                          @Header(KafkaHeaders.OFFSET) long offset,
+                          Acknowledgment ack) {
         log.info("Received payment {} card={} amount={} city={} (key={}, partition={}, offset={})",
                 event.paymentId(), event.cardId(), event.amount(), event.city(),
                 key, partition, offset);
         service.process(event);
+        ack.acknowledge();
     }
 }

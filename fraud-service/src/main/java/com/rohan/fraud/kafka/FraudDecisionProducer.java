@@ -2,6 +2,9 @@ package com.rohan.fraud.kafka;
 
 import com.rohan.fraud.config.KafkaTopicConfig;
 import com.rohan.fraud.dto.FraudDecisionEvent;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,16 +21,19 @@ public class FraudDecisionProducer {
     }
 
     public void publish(FraudDecisionEvent event) {
-        kafkaTemplate.send(KafkaTopicConfig.FRAUD_DECISIONS, event.cardId(), event)
-                .whenComplete((result, ex) -> {
-                    if (ex != null) {
-                        log.error("Failed to publish decision for {}", event.paymentId(), ex);
-                    } else {
-                        log.info("Decision {} for payment {} published (partition {}, offset {})",
-                                event.decision(), event.paymentId(),
-                                result.getRecordMetadata().partition(),
-                                result.getRecordMetadata().offset());
-                    }
-                });
+        try {
+            var result = kafkaTemplate
+                    .send(KafkaTopicConfig.FRAUD_DECISIONS, event.cardId(), event)
+                    .get(10, TimeUnit.SECONDS);
+            log.info("Decision {} for payment {} published (partition {}, offset {})",
+                    event.decision(), event.paymentId(),
+                    result.getRecordMetadata().partition(),
+                    result.getRecordMetadata().offset());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while publishing " + event.paymentId(), e);
+        } catch (ExecutionException | TimeoutException e) {
+            throw new IllegalStateException("Failed to publish decision for " + event.paymentId(), e);
+        }
     }
 }
