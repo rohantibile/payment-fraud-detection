@@ -17,6 +17,7 @@ spring:
     consumer:
       group-id: fraud-service-group
       auto-offset-reset: earliest
+      enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
@@ -29,3 +30,8 @@ spring:
       acks: all
       properties:
         spring.json.add.type.headers: false
+    listener:
+      ack-mode: manual_immediate
+
+fraud:
+  simulate-failure: true
