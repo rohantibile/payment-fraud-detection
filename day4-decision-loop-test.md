@@ -81,6 +81,8 @@ Send each `curl` from **terminal 3**. The `curl` response always shows `"status"
 docker exec -it $(docker compose ps -q mysql) mysql -uroot -proot -e \
 "SELECT card_id, status, status_reason FROM paymentdb.payments ORDER BY created_at DESC LIMIT 10;"
 ```
+Output Screenshots:
+<img width="1716" height="510" alt="image" src="https://github.com/user-attachments/assets/2e42e339-dc2e-46b0-90b7-092cd26ecd76" />
 
 Use a **different cardId for each scenario**, because fraud history is kept per card.
 
