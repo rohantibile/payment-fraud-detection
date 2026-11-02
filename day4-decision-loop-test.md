@@ -29,6 +29,9 @@ Expected: payment-service `Tests run: 2, Failures: 0`, fraud-service `Tests run:
 | `pendingPaymentBecomesBlocked` | A `PENDING` payment becomes `BLOCKED` and keeps the reason |
 | `finalStatusIsNotOverwritten` | An `APPROVED` payment stays `APPROVED` after a later `BLOCKED` decision |
 
+Output Screenshots:
+<img width="1718" height="748" alt="image" src="https://github.com/user-attachments/assets/e79e6675-e08f-488a-93b9-4e1955eaa282" />
+
 ## 2. Start infrastructure
 
 From the project root:
