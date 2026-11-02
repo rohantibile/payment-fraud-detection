@@ -1,4 +1,4 @@
-# Day 4 Test: Decision Loop, Idempotency, Manual Ack, Retry and DLT
+<img width="2078" height="356" alt="image" src="https://github.com/user-attachments/assets/b5a3ea8e-0148-42a5-9b62-3641d164e79a" /># Day 4 Test: Decision Loop, Idempotency, Manual Ack, Retry and DLT
 
 Verified in GitHub Codespaces. Goal: payment-service reads the fraud verdict and changes `PENDING` to `APPROVED`, `FLAGGED` or `BLOCKED`. fraud-service skips duplicate events, commits offsets manually, and sends a failing event to `payment-events.DLT` after 3 retries.
 
@@ -158,7 +158,7 @@ docker exec -it $(docker compose ps -q mysql) mysql -uroot -proot -e \
 Replay its event (replace `PASTE_ID` with the id):
 
 ```bash
-echo 'CARD-D1:{"paymentId":"PASTE_ID","cardId":"CARD-D1","amount":2500,"merchant":"Amazon","city":"Pune","createdAt":"2026-10-30T10:00:00Z"}' | \
+echo 'CARD-S4:{"paymentId":"PASTE_ID","cardId":"CARD-S4","amount":2500,"merchant":"Amazon","city":"Pune","createdAt":"2026-10-30T10:00:00Z"}' | \
 docker exec -i $(docker compose ps -q kafka) /opt/kafka/bin/kafka-console-producer.sh \
   --bootstrap-server localhost:29092 --topic payment-events \
   --property parse.key=true --property key.separator=:
@@ -172,6 +172,11 @@ Expected:
   "SELECT COUNT(*) FROM frauddb.transactions WHERE payment_id='PASTE_ID';"
   ```
 - No new decision published
+
+Output Scenario:
+<img width="2078" height="356" alt="image" src="https://github.com/user-attachments/assets/bae094ef-f72f-4838-a33c-98a805910130" />
+<img width="2072" height="164" alt="image" src="https://github.com/user-attachments/assets/7192155d-3a7f-434e-ae06-8e71dcb0b639" />
+<img width="2084" height="270" alt="image" src="https://github.com/user-attachments/assets/4400e657-0c61-4c5b-9994-c8ff96a84117" />
 
 ## Scenario D6: Duplicate decision is ignored (payment-service idempotency)
 
