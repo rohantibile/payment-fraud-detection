@@ -200,6 +200,9 @@ Expected:
 - payment-service log: `Payment <id> already APPROVED, ignoring duplicate decision`
 - Database: status is still `APPROVED`
 
+Output Screenshots:
+<img width="2084" height="270" alt="image" src="https://github.com/user-attachments/assets/7cf1a190-752d-4ccc-97f2-1aa846269b3b" />
+
 ## Scenario D7: Failing event is retried 3 times, then goes to the DLT
 
 ```bash
@@ -242,6 +245,9 @@ Expected: no new `Simulated failure` lines for the `CARD-D7` payment, so the ret
 
 Expected: within a few seconds the payment becomes `APPROVED`. Kafka kept the event while fraud-service was down.
 
+Output Screenshots:
+<img width="2096" height="550" alt="image" src="https://github.com/user-attachments/assets/9e87d1d4-53a4-415e-95e3-a1a03616981c" />
+
 ## Scenario D10: Invalid input is rejected before the loop
 
 ```bash
@@ -251,6 +257,9 @@ curl -i -X POST http://localhost:8081/api/v1/payments \
 ```
 
 Expected: HTTP `400`, no row in `paymentdb.payments`, and nothing in either service log.
+
+Output Screenshots:
+<img width="2096" height="578" alt="image" src="https://github.com/user-attachments/assets/6738201a-2a60-40e9-93af-60ae5ad13bcb" />
 
 ## Scenario D11: Old payments from Day 3 also resolve
 
@@ -272,7 +281,10 @@ docker exec -it $(docker compose ps -q kafka) /opt/kafka/bin/kafka-topics.sh \
   --bootstrap-server localhost:29092 --list
 ```
 
-Expected: `payment-events`, `payment-events.DLT`, `fraud-decisions`.
+Expected: `payment-events`, `payment-events.DLT`, `fraud-decisions`,`payment-events.dlt`.
+
+output Screenshots;
+<img width="2106" height="238" alt="image" src="https://github.com/user-attachments/assets/a6202d62-4b30-4a77-a259-57c59909d453" />
 
 Read the verdicts and check the partitions:
 
@@ -283,6 +295,9 @@ docker exec -it $(docker compose ps -q kafka) /opt/kafka/bin/kafka-console-consu
 ```
 
 Expected: every `CARD-D2` line shows the same `Partition:N`.
+
+Output Screenshots:
+<img width="2046" height="284" alt="image" src="https://github.com/user-attachments/assets/7060b1a3-67d7-4729-a1b3-4e1bc8629fa2" />
 
 ## 7. Reset between runs (optional)
 
@@ -304,20 +319,20 @@ Set `fraud.simulate-failure` to `false` before demos or publishing. Stop the Cod
 
 ## Day 4 checklist
 
-- [ ] payment-service decision tests pass (2)
-- [ ] fraud-service rule tests still pass (12)
-- [ ] D1: payment becomes `APPROVED`
-- [ ] D2: 4th rapid payment becomes `BLOCKED`
-- [ ] D3: high amount becomes `FLAGGED`
-- [ ] D4: Pune then Mumbai becomes `BLOCKED`
-- [ ] D5: duplicate payment event skipped
-- [ ] D6: duplicate decision ignored, status unchanged
-- [ ] D7: 4 failed attempts, then a message in `payment-events.DLT`
-- [ ] D8: failed event does not return after restart
-- [ ] D9: payment resolves after fraud-service restarts
-- [ ] D10: invalid input returns `400`
-- [ ] D11: older `PENDING` payments resolve
-- [ ] Same card, same partition in `fraud-decisions`
+- [x] payment-service decision tests pass (2)
+- [x] fraud-service rule tests still pass (12)
+- [x] D1: payment becomes `APPROVED`
+- [x] D2: 4th rapid payment becomes `BLOCKED`
+- [x] D3: high amount becomes `FLAGGED`
+- [x] D4: Pune then Mumbai becomes `BLOCKED`
+- [x] D5: duplicate payment event skipped
+- [x] D6: duplicate decision ignored, status unchanged
+- [x] D7: 4 failed attempts, then a message in `payment-events.DLT`
+- [x] D8: failed event does not return after restart
+- [x] D9: payment resolves after fraud-service restarts
+- [x] D10: invalid input returns `400`
+- [x] D11: older `PENDING` payments resolve
+- [x] Same card, same partition in `fraud-decisions`
 
 ## Fixes applied during Day 4
 
