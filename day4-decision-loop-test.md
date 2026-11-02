@@ -113,6 +113,9 @@ curl -X POST http://localhost:8081/api/v1/payments -H "Content-Type: application
 
 Expected in the database: three `APPROVED` and one `BLOCKED`, with `status_reason` containing `VELOCITY`.
 
+Output Screenshots:
+<img width="2090" height="446" alt="image" src="https://github.com/user-attachments/assets/17a18d07-fba6-4733-a76c-af2374b08350" />
+
 ## Scenario D3: High amount becomes FLAGGED
 
 ```bash
