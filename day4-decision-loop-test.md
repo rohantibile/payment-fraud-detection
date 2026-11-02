@@ -126,6 +126,9 @@ curl -X POST http://localhost:8081/api/v1/payments \
 
 Expected: status `FLAGGED`, `status_reason` contains `AMOUNT`.
 
+Output Screenshots;
+<img width="2104" height="160" alt="image" src="https://github.com/user-attachments/assets/1dd42842-bee7-4901-8d36-dd9914983c92" />
+
 ## Scenario D4: Different city within 10 minutes becomes BLOCKED (geo)
 
 ```bash
