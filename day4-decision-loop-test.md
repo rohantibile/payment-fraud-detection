@@ -143,6 +143,9 @@ curl -X POST http://localhost:8081/api/v1/payments \
 
 Expected: first `APPROVED`, second `BLOCKED` with `GEO_MISMATCH` in the reason.
 
+Output Screenshots:
+<img width="2078" height="270" alt="image" src="https://github.com/user-attachments/assets/9bdb4ca1-704b-4e70-88fd-fd0eab9aa0d9" />
+
 ## Scenario D5: Duplicate payment event is skipped (fraud-service idempotency)
 
 First get the paymentId of the `CARD-D1` payment:
