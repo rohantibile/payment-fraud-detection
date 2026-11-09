@@ -21,7 +21,7 @@ public class PaymentController {
         return service.create(request);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public PaymentResponse get(@PathVariable String id) {
         return service.get(id);
     }

@@ -13,7 +13,7 @@ import com.rohan.payment.service.PaymentService;
 @Component 
 public class FraudDecisionConsumer {
     private static final Logger log = LoggerFactory.getLogger(FraudDecisionConsumer.class);
-    private static PaymentService service;
+    private final PaymentService service;
 
     public FraudDecisionConsumer(PaymentService service) {
         this.service = service;

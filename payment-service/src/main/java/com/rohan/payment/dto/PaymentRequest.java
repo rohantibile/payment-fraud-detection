@@ -1,12 +1,14 @@
 package com.rohan.payment.dto;
 
 import java.math.BigDecimal;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record PaymentRequest(
-    @NotNull String cardId,
+    @NotBlank String cardId,
     @NotNull @Positive BigDecimal amount,
-    @NotNull String merchant,
-    @NotNull String city) { 
+    @NotBlank String merchant,
+    @NotBlank String city) { 
 }
