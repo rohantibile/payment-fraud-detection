@@ -178,7 +178,7 @@ stateDiagram-v2
 | Concern | What the code does | Evidence |
 |---|---|---|
 | Save and publish (payment-service) | Two separate steps, no outbox. A crash between them loses the event | **[V]** |
-| Producer failure (payment-service) | Async; failure is only logged; client still got 201 | **[V]** |
+| Producer failure (payment-service) | A failure reported by the send future is only logged and the client still gets 201. An exception thrown synchronously by `send` (for example when Kafka is unreachable) is not caught and fails the POST after the row is saved; this matches the Day 2 `500` you saw | **[V]** / **[I]** |
 | Delivery to fraud-service | At least once: manual ack after success, retried on error | **[V]** |
 | Duplicate payment event | Skipped with `existsById` | **[V]** |
 | Delivery to payment-service | At least once. Commit mode not set in config | **[V]** / **[U]** |

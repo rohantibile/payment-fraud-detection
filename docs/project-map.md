@@ -22,7 +22,7 @@ payment-fraud-detection/
 │   └── init.sql                     creates paymentdb and frauddb
 ├── day1-infra-payment-crud-test.md  test docs, currently in the repo root
 ├── day2-kafka-producer-consumer-test.md
-├── day3-fraud-rules-test.md         older version (says 10 tests; the real count is 12)
+├── day3-fraud-rules-test.md         final version (12 tests)
 ├── day4-decision-loop-test.md
 ├── payment-service/                 port 8081
 │   ├── pom.xml
@@ -59,7 +59,7 @@ payment-fraud-detection/
             ├── engine/FraudEngineTest.java
             └── rules/{VelocityRuleTest, AmountRuleTest, GeoMismatchRuleTest}.java
 ```
-**[V]** (listing taken from the archive; 37 Java files, 888 lines in total).
+**[V]** (listing taken from the archive: 39 Java files, 31 main and 8 test, 890 lines in total).
 
 **Not in the repo yet:** CI workflow (`.github/workflows`), `.devcontainer/`, `Dockerfile` for either service, a demo GIF, a `docs/` folder, a LICENSE. **[V]**
 
@@ -170,12 +170,11 @@ Tests: `./mvnw test` in a service folder. The two `contextLoads` tests need MySQ
 | # | Suggestion | Why |
 |---|---|---|
 | 1 | Move the four `day*-test.md` files into `docs/tests/` | Keeps the repo root clean for recruiters |
-| 2 | Replace `day3-fraud-rules-test.md` with the final `day3-fraud-rules-engine-test.md` | The committed one is the older version |
-| 3 | Fix the Swagger line in the Day 1 test doc | Swagger is gone |
-| 4 | Finish the README: replace placeholders, redraw the diagram without Zookeeper | Day 5 |
-| 5 | Add `.github/workflows` (build and test) and `.devcontainer/` | Day 5 |
-| 6 | Add a `Dockerfile` per service and put the services in compose | Needed for deployment on Day 6 |
-| 7 | Put the generated `docs/*.md` files in `docs/` | This documentation set |
+| 2 | Fix the Swagger line in the Day 1 test doc | Swagger is gone |
+| 3 | Finish the README: replace placeholders, redraw the diagram without Zookeeper | Day 5 |
+| 4 | Add `.github/workflows` (build and test) and `.devcontainer/` | Day 5 |
+| 5 | Add a `Dockerfile` per service and put the services in compose | Needed for deployment on Day 6 |
+| 6 | Put the generated `docs/*.md` files in `docs/` | This documentation set |
 
 ---
 

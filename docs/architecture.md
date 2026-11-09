@@ -205,7 +205,7 @@ flowchart LR
 - **Purpose:** announce each new payment to Kafka.
 - **Files:** `PS/kafka/PaymentEventProducer.java`, `PS/config/KafkaTopicConfig.java`.
 - **Key symbol:** `PaymentEventProducer.publish` sends to `payment-events` with key `cardId` `[V]` (same card, same partition, ordered).
-- **Pattern:** asynchronous. A failed send is only logged, it does not throw `[V]`.
+- **Pattern:** asynchronous. A failure reported through the send future is only logged (`whenComplete`). There is no try/catch around `send`, so an exception thrown synchronously by `send` would reach the caller and fail the `POST` `[V]`.
 - **Failure:** the payment is saved first and published second, in two separate steps `[V]`. If publishing fails, the payment can stay `PENDING` with no event. The standard fix is the transactional outbox pattern.
 
 ### C4. Decision consumer

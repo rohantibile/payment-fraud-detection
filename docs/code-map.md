@@ -62,7 +62,7 @@ Risk: `PaymentStatus.valueOf(event.decision())` throws `IllegalArgumentException
 
 ### 3.4 `kafka/PaymentEventProducer` (34 lines)
 - `publish(PaymentEvent)`: `kafkaTemplate.send("payment-events", cardId, event)`. The key is `cardId`, so one card always lands on one partition. **[V]**
-- Asynchronous. `whenComplete` only logs. If the send fails, the failure is logged and nothing else happens: the HTTP call has already returned 201. **[V]**
+- Asynchronous. `whenComplete` only logs a failure reported through the send future. There is no try/catch around `send`, so an exception thrown synchronously by `send` reaches the caller and fails the POST after the row is saved. **[V]**
 
 ### 3.5 `kafka/FraudDecisionConsumer` (27 lines)
 - `@KafkaListener(topics = "fraud-decisions")` calls `service.applyDecision(event)`. **[V]**

@@ -63,7 +63,7 @@ A one-page recall sheet for the Payment Fraud Detection project. Read it before 
 ## 5. Known weaknesses (say them first, before the interviewer does)
 
 1. **Save then publish is not atomic** in payment-service. A crash between them leaves a PENDING payment with no event. Fix: transactional outbox.
-2. **Producer failure is only logged** in payment-service; the client still gets 201.
+2. **Producer failure handling is thin** in payment-service: a failed send result is only logged (client still gets 201), and a synchronous send error fails the POST after the payment row is already saved.
 3. **PENDING has no timeout**: a payment whose event reaches the DLT stays PENDING, and nothing reprocesses the DLT.
 4. **`GET /api/v1/payments/{id}` mapping bug** (`@GetMapping` without `"/{id}"`), found in review, fix in progress.
 5. **`existsById` is not atomic**, so two simultaneous duplicates could slip through. Per-card ordering makes this unlikely.
